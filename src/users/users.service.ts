@@ -9,8 +9,9 @@ export class UsersService {
     return this.users.find((user) => user.email === email);
   }
 
-  async insert(user: any) {
+  async insert(user: any): Promise<any> {
     const newUser = new User(user?.email, user?.password, user?.roles);
     this.users.push(newUser);
+    return newUser;
   }
 }

@@ -15,20 +15,20 @@ export class AuthController {
   async authorize(payload: any) {
     console.log('payload', payload);
 
-    const result = new User('ppe@pepe.com', 'seviche', ['boss']); // await this.usersService.findOne(payload?.email);
+    const result = new User(payload.email, payload.password, payload.roles); // await this.usersService.findOne(payload?.email);
     const user = this.authService.validateUser(result, payload?.password);
     if (!user) {
       return null;
     }
-    return this.authService.getAccessToken(user);
+    return this.authService.getAccessToken(await user);
   }
 
   @MessagePattern({ cmd: 'validate' })
-  validate(token: string) {
+  validate(token: {token:string}) {
     console.log('token', token);
 
     try {
-      return this.authService.validateUserByToken(token);
+      return this.authService.validateUserByToken(token.token);
     } catch (e) {
       Logger.error(e);
       return null;
